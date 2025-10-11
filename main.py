@@ -568,7 +568,7 @@ class LawMakerGUI:
         editor_header = ttk.Frame(self.editor_frame, style='Panel.TFrame')
         editor_header.pack(fill=tk.X, padx=10, pady=10)
 
-        ttk.Label(editor_header, text="Prolog Code Editor",
+        ttk.Label(editor_header, text="",
                   style='Header.TLabel').pack(side=tk.LEFT)
 
         self.attempts_label = ttk.Label(editor_header, text="", style='Solarpunk.TLabel')
@@ -582,7 +582,7 @@ class LawMakerGUI:
         button_panel = ttk.Frame(self.editor_frame, style='Panel.TFrame')
         button_panel.pack(fill=tk.X, padx=10, pady=10)
 
-        ttk.Label(button_panel, text="Prolog Templates", style='Header.TLabel').pack(anchor=tk.W, pady=(0, 5))
+        ttk.Label(button_panel, text="", style='Header.TLabel').pack(anchor=tk.W, pady=(0, 5))
 
         templates_frame = ttk.Frame(button_panel, style='Solarpunk.TFrame')
         templates_frame.pack(fill=tk.X)
