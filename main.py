@@ -558,7 +558,7 @@ class LawMakerGUI:
     def setup_code_editor(self):
         """Setup Solarpunk-styled code editor with calculator interface"""
         # Top panel: Live results display
-        results_label = ttk.Label(self.editor_frame, text="Live Results", style='Header.TLabel')
+        results_label = ttk.Label(self.editor_frame, text="Results", style='Header.TLabel')
         results_label.pack(pady=5)
 
         self.live_results_text = self.create_styled_text(self.editor_frame, height=4)
@@ -568,7 +568,7 @@ class LawMakerGUI:
         editor_header = ttk.Frame(self.editor_frame, style='Panel.TFrame')
         editor_header.pack(fill=tk.X, padx=10, pady=10)
 
-        ttk.Label(editor_header, text="",
+        ttk.Label(editor_header, text="Your Code",
                   style='Header.TLabel').pack(side=tk.LEFT)
 
         self.attempts_label = ttk.Label(editor_header, text="", style='Solarpunk.TLabel')
