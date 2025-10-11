@@ -616,6 +616,8 @@ subsidy_amount(Person, Amount) :-
 
         if result != GameResult.SUCCESS and self.attempts_remaining == 0:
             results_text += "\nAttempts exhausted.\nConsider reviewing the task or selecting another.\n"
+            # Show failure view after a brief delay
+            self.root.after(100, lambda: self.show_failure_view())
         elif result != GameResult.SUCCESS and self.attempts_remaining > 0:
             dots = "●" * self.attempts_remaining
             results_text += f"\n{dots} attempts remaining.\n"
@@ -648,12 +650,155 @@ subsidy_amount(Person, Amount) :-
         self.notebook.select(self.results_frame)
 
     def show_completion_and_return(self):
-        """Show completion message and return to task overview"""
-        messagebox.showinfo("Task Complete",
-                            f"Ordinance {self.current_level_index + 1} successfully formalized!\n\n"
-                            "Implementation verified and archived.\n\n"
-                            "Returning to assignment board...")
-        self.show_task_overview()
+        """Show brief message and return to task overview"""
+        # Check if all tasks are completed
+        all_completed = all(level.completed for level in self.levels)
+        if all_completed:
+            self.show_success_view()
+        else:
+            messagebox.showinfo("Task Complete",
+                                f"Ordinance {self.current_level_index + 1} successfully formalized!\n\n"
+                                "Implementation verified and archived.")
+            self.show_task_overview()
+
+    def show_success_view(self):
+        """Show success view after completing ALL tasks"""
+        self.current_view = GameView.SUCCESS
+        self.clear_view()
+
+        success_frame = tk.Frame(self.main_container, bg=Theme.COLORS['bg_primary'], padx=50, pady=40)
+        success_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Spacing
+        tk.Frame(success_frame, bg=Theme.COLORS['bg_primary'], height=60).pack()
+
+        # Success header
+        ttk.Label(success_frame,
+                  text="All Tasks Complete",
+                  font=('Helvetica Neue', 20),
+                  foreground=Theme.COLORS['success'],
+                  background=Theme.COLORS['bg_primary']).pack(pady=(0, 20))
+
+        # Success message
+        success_msg = f"""Department of Administrative Logic - Final Report
+
+All {len(self.levels)} ordinances have been successfully formalized and integrated into the municipal database. The modernization project is complete.
+
+{self.get_success_flavor_text()}
+
+The coffee machine was fixed yesterday. Nobody knows who did it. The new intern maybe.
+
+Your work here is done. For now."""
+
+        text_widget = tk.Text(success_frame, height=12, width=70, wrap=tk.WORD,
+                              font=('Helvetica Neue', 11),
+                              bg=Theme.COLORS['bg_panel'],
+                              fg=Theme.COLORS['text_primary'],
+                              relief=tk.FLAT, bd=0, padx=25, pady=25)
+        text_widget.insert(tk.END, success_msg)
+        text_widget.config(state=tk.DISABLED)
+        text_widget.pack(fill=tk.BOTH, expand=True, pady=(0, 30))
+
+        # Button
+        btn = tk.Button(success_frame, text="Start Over",
+                        command=self.restart_game,
+                        font=('Helvetica Neue', 11),
+                        bg=Theme.COLORS['accent_primary'],
+                        fg=Theme.COLORS['text_primary'],
+                        relief=tk.FLAT, bd=0,
+                        padx=40, pady=12)
+        btn.pack()
+
+    def show_failure_view(self):
+        """Show failure view - game over after exhausting all attempts"""
+        self.current_view = GameView.FAILURE
+        self.clear_view()
+
+        failure_frame = tk.Frame(self.main_container, bg=Theme.COLORS['bg_primary'], padx=50, pady=40)
+        failure_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Spacing
+        tk.Frame(failure_frame, bg=Theme.COLORS['bg_primary'], height=60).pack()
+
+        # Failure header
+        ttk.Label(failure_frame,
+                  text="Assignment Incomplete",
+                  font=('Helvetica Neue', 20),
+                  foreground=Theme.COLORS['warning'],
+                  background=Theme.COLORS['bg_primary']).pack(pady=(0, 20))
+
+        # Failure message
+        completed_count = sum(1 for level in self.levels if level.completed)
+        failure_msg = f"""Ordinance {self.current_level_index + 1}: {self.current_level.title}
+
+All three attempts have been exhausted. The implementation could not be verified within standard procedure.
+
+Progress: {completed_count}/{len(self.levels)} ordinances formalized.
+
+{self.get_failure_flavor_text()}
+
+The Reference tab contains a working solution. Learning takes time. The system will be here when you're ready to try again."""
+
+        text_widget = tk.Text(failure_frame, height=13, width=70, wrap=tk.WORD,
+                              font=('Helvetica Neue', 11),
+                              bg=Theme.COLORS['bg_panel'],
+                              fg=Theme.COLORS['text_primary'],
+                              relief=tk.FLAT, bd=0, padx=25, pady=25)
+        text_widget.insert(tk.END, failure_msg)
+        text_widget.config(state=tk.DISABLED)
+        text_widget.pack(fill=tk.BOTH, expand=True, pady=(0, 30))
+
+        # Button
+        btn = tk.Button(failure_frame, text="Start Over",
+                        command=self.restart_game,
+                        font=('Helvetica Neue', 11),
+                        bg=Theme.COLORS['accent_primary'],
+                        fg=Theme.COLORS['text_primary'],
+                        relief=tk.FLAT, bd=0,
+                        padx=40, pady=12)
+        btn.pack()
+
+    def restart_game(self):
+        """Restart the game from the beginning"""
+        # Reset all level completion states
+        for level in self.levels:
+            level.completed = False
+
+        # Reset current level
+        self.current_level = None
+        self.current_level_index = 0
+        self.attempts_remaining = 3
+
+        # Show introduction again
+        self.show_introduction()
+
+    def get_success_flavor_text(self):
+        """Return randomized success flavor text"""
+        import random
+        texts = [
+            "Karla from accounting sent a brief email: 'Good work.' High praise.",
+            "The quarterly review mentioned your efficiency. You received a plant for your desk.",
+            "Your supervisor nodded twice during the final presentation. Unprecedented.",
+            "The system integration was seamless. IT didn't have to come in over the weekend.",
+            "Someone left a thank-you note on your desk. Anonymous. Possibly sincere.",
+        ]
+        return random.choice(texts)
+
+    def get_failure_flavor_text(self):
+        """Return randomized failure flavor text"""
+        import random
+        texts = [
+            "Thomas took four months to learn the system. You're ahead of schedule, really.",
+            "The Pocket-Inferer has a learning curve. Even the documentation admits this, quietly.",
+            "The Pocket-Inferer training materials are being revised next quarter. Until then, maybe try again.",
+            "Nobody gets everything right the first time. Or the second. The system remains patient.",
+            "The senior developers still consult reference sheets. This is not widely discussed.",
+        ]
+        return random.choice(texts)
+
+    def return_to_failed_task(self):
+        """Return to the task workspace to review (no new attempts)"""
+        self.show_task_workspace()
 
     def display_error(self, error_msg: str):
         """Display error message"""
@@ -671,4 +816,3 @@ subsidy_amount(Person, Amount) :-
     def run(self):
         """Start the application"""
         self.root.mainloop()
-

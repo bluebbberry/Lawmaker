@@ -5,3 +5,5 @@ class GameView(Enum):
     INTRODUCTION = "introduction"
     TASK_OVERVIEW = "task_overview"
     TASK_WORKSPACE = "task_workspace"
+    FAILURE = "failure"
+    SUCCESS = "success"
