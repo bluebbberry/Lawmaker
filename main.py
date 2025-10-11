@@ -561,7 +561,7 @@ class LawMakerGUI:
         results_label = ttk.Label(self.editor_frame, text="Results", style='Header.TLabel')
         results_label.pack(pady=5)
 
-        self.live_results_text = self.create_styled_text(self.editor_frame, height=4)
+        self.live_results_text = self.create_styled_text(self.editor_frame, height=10)
         self.live_results_text.pack(fill=tk.BOTH, expand=False, padx=10, pady=(0, 10))
 
         # Middle panel: Code editor header and input
