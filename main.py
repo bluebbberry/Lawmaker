@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
 Law Maker - A Prolog Programming Game
-
-A game where players implement laws in Prolog for the fictional city-state of Solarfurt.
-Features a beautiful Solarpunk aesthetic - rusty-futuristic with sustainable tech vibes.
+Minimalist pastel aesthetic with quietly utopian undertones.
 """
 
 import os
@@ -60,84 +58,42 @@ class Level:
     solution: List[str] = None
 
 
-class SolarpunkTheme:
-    """Solarpunk theme colors and styles - rusty-futuristic aesthetic"""
-
+class Theme:
+    """Minimalist pastel theme"""
     COLORS = {
-        'bg_primary': '#0A0E1A',
-        'bg_secondary': '#1B2B35',
-        'bg_panel': '#2A4A5A',
-        'bg_input': '#0F1419',
-        'accent_primary': '#00D4AA',
-        'accent_secondary': '#66B2FF',
-        'accent_tertiary': '#FFB366',
-        'accent_success': '#00FF88',
-        'text_primary': '#E8F4F8',
-        'text_secondary': '#B8D4E8',
-        'text_accent': '#00D4AA',
-        'warning': '#FF6B35',
-        'success': '#00FF88',
-        'border': '#4A6FA5',
-        'hover': '#3A5F85'
+        'bg_primary': '#F5F5F0', 'bg_secondary': '#E8E4E0',
+        'bg_panel': '#FAF8F5', 'bg_input': '#FEFEFE',
+        'accent_primary': '#9BB5B0', 'accent_secondary': '#D4A5A5',
+        'accent_tertiary': '#B5B0C9', 'success': '#A8C5A6',
+        'text_primary': '#3A3A38', 'text_secondary': '#6B6B68',
+        'text_accent': '#7A8B88', 'warning': '#D9A89F',
+        'border': '#D5D0C8', 'hover': '#C8C3BB'
     }
 
     @staticmethod
     def configure_style():
-        """Configure ttk styles with Solarpunk theme"""
         style = ttk.Style()
+        c = Theme.COLORS
 
-        style.configure('Solarpunk.TFrame',
-                        background=SolarpunkTheme.COLORS['bg_primary'],
-                        relief='flat')
-
-        style.configure('Panel.TFrame',
-                        background=SolarpunkTheme.COLORS['bg_panel'],
-                        relief='ridge',
-                        borderwidth=1)
-
-        style.configure('Solarpunk.TLabel',
-                        background=SolarpunkTheme.COLORS['bg_primary'],
-                        foreground=SolarpunkTheme.COLORS['text_primary'],
-                        font=('Helvetica', 10))
-
-        style.configure('Title.TLabel',
-                        background=SolarpunkTheme.COLORS['bg_primary'],
-                        foreground=SolarpunkTheme.COLORS['accent_primary'],
-                        font=('Helvetica', 18, 'bold'))
-
-        style.configure('Header.TLabel',
-                        background=SolarpunkTheme.COLORS['bg_primary'],
-                        foreground=SolarpunkTheme.COLORS['text_accent'],
-                        font=('Helvetica', 12, 'bold'))
-
-        style.configure('Solarpunk.TButton',
-                        background=SolarpunkTheme.COLORS['accent_primary'],
-                        foreground=SolarpunkTheme.COLORS['bg_primary'],
-                        font=('Helvetica', 10, 'bold'),
-                        borderwidth=0,
-                        relief='flat',
-                        padding=(12, 6))
-
-        style.map('Solarpunk.TButton',
-                  background=[('active', SolarpunkTheme.COLORS['accent_secondary']),
-                              ('pressed', SolarpunkTheme.COLORS['accent_tertiary'])])
-
-        style.configure('Solarpunk.TNotebook',
-                        background=SolarpunkTheme.COLORS['bg_primary'],
-                        borderwidth=0)
-
-        style.configure('Solarpunk.TNotebook.Tab',
-                        background=SolarpunkTheme.COLORS['bg_secondary'],
-                        foreground=SolarpunkTheme.COLORS['text_secondary'],
-                        padding=[16, 8],
-                        font=('Helvetica', 10, 'bold'),
-                        borderwidth=1)
-
-        style.map('Solarpunk.TNotebook.Tab',
-                  background=[('selected', SolarpunkTheme.COLORS['accent_primary']),
-                              ('active', SolarpunkTheme.COLORS['hover'])],
-                  foreground=[('selected', SolarpunkTheme.COLORS['bg_primary'])])
-
+        style.configure('Pastel.TFrame', background=c['bg_primary'], relief='flat')
+        style.configure('Panel.TFrame', background=c['bg_panel'], relief='flat')
+        style.configure('Pastel.TLabel', background=c['bg_primary'],
+                        foreground=c['text_primary'], font=('Helvetica Neue', 10))
+        style.configure('Title.TLabel', background=c['bg_primary'],
+                        foreground=c['text_primary'], font=('Helvetica Neue', 16))
+        style.configure('Header.TLabel', background=c['bg_primary'],
+                        foreground=c['text_accent'], font=('Helvetica Neue', 11))
+        style.configure('Pastel.TButton', background=c['accent_primary'],
+                        foreground=c['text_primary'], font=('Helvetica Neue', 9),
+                        borderwidth=1, relief='flat', padding=(10, 5))
+        style.map('Pastel.TButton', background=[('active', c['hover']), ('pressed', c['accent_secondary'])])
+        style.configure('Pastel.TNotebook', background=c['bg_primary'], borderwidth=0)
+        style.configure('Pastel.TNotebook.Tab', background=c['bg_secondary'],
+                        foreground=c['text_secondary'], padding=[14, 6],
+                        font=('Helvetica Neue', 9), borderwidth=0)
+        style.map('Pastel.TNotebook.Tab',
+                  background=[('selected', c['bg_primary']), ('active', c['hover'])],
+                  foreground=[('selected', c['text_primary'])])
         return style
 
 
@@ -161,7 +117,6 @@ class LevelLoader:
                 level = LevelLoader.load_level_from_file(filepath)
                 if level:
                     levels.append(level)
-
         except Exception as e:
             print(f"Error loading levels: {e}")
             return LevelLoader.get_sample_levels()
@@ -369,24 +324,12 @@ class PrologTemplateButton(tk.Button):
         self.template_text = template_text
         self.code_widget = code_widget
 
-        super().__init__(
-            parent,
-            text=label,
-            command=self.insert_template,
-            bg=SolarpunkTheme.COLORS['accent_secondary'],
-            fg=SolarpunkTheme.COLORS['bg_primary'],
-            font=('Helvetica', 9, 'bold'),
-            relief=tk.RAISED,
-            bd=2,
-            padx=6,
-            pady=4,
-            wraplength=80,
-            justify=tk.CENTER,
-            **kwargs
-        )
+        super().__init__(parent, text=label, command=self.insert_template,
+                         bg=Theme.COLORS['bg_secondary'], fg=Theme.COLORS['text_primary'],
+                         font=('Helvetica Neue', 8), relief=tk.FLAT, bd=1,
+                         padx=5, pady=4, wraplength=70, justify=tk.CENTER, **kwargs)
 
     def insert_template(self):
-        """Insert template code at cursor position"""
         cursor_pos = self.code_widget.index(tk.INSERT)
         self.code_widget.insert(cursor_pos, self.template_text + '\n')
         new_pos = self.code_widget.index(f"{cursor_pos}+{len(self.template_text)} chars")
@@ -403,8 +346,8 @@ class LawMakerGUI:
         self.root.title("Law Maker")
         self.root.geometry("1200x900")
 
-        self.style = SolarpunkTheme.configure_style()
-        self.root.configure(bg=SolarpunkTheme.COLORS['bg_primary'])
+        self.style = Theme.configure_style()
+        self.root.configure(bg=Theme.COLORS['bg_primary'])
 
         self.levels_directory = "levels"
         self.levels = []
@@ -429,32 +372,27 @@ class LawMakerGUI:
     def setup_gui(self):
         """Setup the Solarpunk-themed GUI components"""
         header_frame = ttk.Frame(self.root, style='Panel.TFrame')
-        header_frame.pack(fill=tk.X, padx=5, pady=5)
+        header_frame.pack(fill=tk.X, padx=8, pady=8)
 
-        title_label = ttk.Label(header_frame,
-                                text="Solarfurt Department of Finance",
-                                style='Title.TLabel')
-        title_label.pack(pady=10)
+        ttk.Label(header_frame, text="Department of Administrative Logic",
+                  style='Title.TLabel').pack(pady=8)
+        ttk.Label(header_frame, text="Solarfurt · B Wing",
+                  style='Header.TLabel').pack(pady=(0, 8))
 
-        subtitle = ttk.Label(header_frame,
-                             text="B Wing, 2028/05/12",
-                             style='Header.TLabel')
-        subtitle.pack(pady=(0, 10))
-
-        self.notebook = ttk.Notebook(self.root, style='Solarpunk.TNotebook')
+        self.notebook = ttk.Notebook(self.root, style='Pastel.TNotebook')
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
-        self.level_frame = ttk.Frame(self.notebook, style='Solarpunk.TFrame')
-        self.notebook.add(self.level_frame, text="Mission Select")
+        self.level_frame = ttk.Frame(self.notebook, style='Pastel.TFrame')
+        self.notebook.add(self.level_frame, text="Tasks")
 
-        self.problem_frame = ttk.Frame(self.notebook, style='Solarpunk.TFrame')
-        self.notebook.add(self.problem_frame, text="Legal Brief")
+        self.problem_frame = ttk.Frame(self.notebook, style='Pastel.TFrame')
+        self.notebook.add(self.problem_frame, text="Brief")
 
-        self.editor_frame = ttk.Frame(self.notebook, style='Solarpunk.TFrame')
+        self.editor_frame = ttk.Frame(self.notebook, style='Pastel.TFrame')
         self.notebook.add(self.editor_frame, text="Pocket-Inferer")
 
-        self.results_frame = ttk.Frame(self.notebook, style='Solarpunk.TFrame')
-        self.notebook.add(self.results_frame, text="Test Results")
+        self.results_frame = ttk.Frame(self.notebook, style='Pastel.TFrame')
+        self.notebook.add(self.results_frame, text="Results")
 
         self.setup_level_selection()
         self.setup_problem_description()
@@ -462,253 +400,262 @@ class LawMakerGUI:
         self.setup_results_panel()
 
     def create_styled_text(self, parent, **kwargs):
-        """Create a text widget with Solarpunk styling"""
-        text_widget = scrolledtext.ScrolledText(
-            parent,
-            bg=SolarpunkTheme.COLORS['bg_input'],
-            fg=SolarpunkTheme.COLORS['text_primary'],
-            insertbackground=SolarpunkTheme.COLORS['accent_tertiary'],
-            selectbackground=SolarpunkTheme.COLORS['accent_primary'],
-            relief='sunken',
-            borderwidth=2,
-            **kwargs
+        return scrolledtext.ScrolledText(
+            parent, bg=Theme.COLORS['bg_input'], fg=Theme.COLORS['text_primary'],
+            insertbackground=Theme.COLORS['text_accent'], selectbackground=Theme.COLORS['accent_tertiary'],
+            relief='flat', borderwidth=1, **kwargs
         )
-        return text_widget
 
     def setup_level_selection(self):
-        """Setup Solarpunk-styled level selection panel"""
-        header = ttk.Label(self.level_frame,
-                           text="Select Your Legal Mission",
-                           style='Header.TLabel')
-        header.pack(pady=15)
-
-        desc = ttk.Label(self.level_frame,
-                         text="Choose a law to implement in our legal database:",
-                         style='Solarpunk.TLabel')
-        desc.pack(pady=5)
+        ttk.Label(self.level_frame, text="Available Tasks",
+                  style='Header.TLabel').pack(pady=12)
+        ttk.Label(self.level_frame, text="Select an ordinance to formalize:",
+                  style='Pastel.TLabel').pack(pady=5)
 
         list_frame = ttk.Frame(self.level_frame, style='Panel.TFrame')
-        list_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=15)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=12)
 
         self.level_listbox = tk.Listbox(
-            list_frame,
-            height=12,
-            font=('Consolas', 11),
-            bg=SolarpunkTheme.COLORS['bg_input'],
-            fg=SolarpunkTheme.COLORS['text_primary'],
-            selectbackground=SolarpunkTheme.COLORS['accent_tertiary'],
-            selectforeground=SolarpunkTheme.COLORS['text_primary'],
-            relief='sunken',
-            borderwidth=2
+            list_frame, height=12, font=('Helvetica Neue', 10),
+            bg=Theme.COLORS['bg_input'], fg=Theme.COLORS['text_primary'],
+            selectbackground=Theme.COLORS['accent_tertiary'],
+            selectforeground=Theme.COLORS['text_primary'],
+            relief='flat', borderwidth=1
         )
         self.level_listbox.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         self.level_listbox.bind('<Double-Button-1>', self.on_level_select)
 
-        button_frame = ttk.Frame(self.level_frame, style='Solarpunk.TFrame')
-        button_frame.pack(pady=15)
+        button_frame = ttk.Frame(self.level_frame, style='Pastel.TFrame')
+        button_frame.pack(pady=12)
 
-        ttk.Button(button_frame, text="Activate Mission",
-                   command=self.on_level_select, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=10)
-        ttk.Button(button_frame, text="Refresh Database",
-                   command=self.refresh_levels, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=10)
+        ttk.Button(button_frame, text="Begin Task", command=self.on_level_select,
+                   style='Pastel.TButton').pack(side=tk.LEFT, padx=8)
+        ttk.Button(button_frame, text="Refresh", command=self.refresh_levels,
+                   style='Pastel.TButton').pack(side=tk.LEFT, padx=8)
 
-        self.status_label = ttk.Label(self.level_frame, text="", style='Solarpunk.TLabel')
-        self.status_label.pack(pady=10)
+        self.status_label = ttk.Label(self.level_frame, text="", style='Pastel.TLabel')
+        self.status_label.pack(pady=8)
 
         self.populate_level_list()
 
     def setup_problem_description(self):
-        """Setup Solarpunk-styled problem description panel"""
         self.problem_title = ttk.Label(self.problem_frame, text="", style='Header.TLabel')
-        self.problem_title.pack(pady=10)
+        self.problem_title.pack(pady=8)
 
-        problem_notebook = ttk.Notebook(self.problem_frame, style='Solarpunk.TNotebook')
+        problem_notebook = ttk.Notebook(self.problem_frame, style='Pastel.TNotebook')
         problem_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
 
-        story_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(story_frame, text="Background")
-        self.story_text = self.create_styled_text(story_frame, state=tk.DISABLED, height=12)
-        self.story_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # Create tabs
+        tabs = [
+            ("Context", "story_text", 12),
+            ("Data", "facts_text", 12, ('Menlo', 9)),
+            ("Requirements", "law_text", 12),
+            ("Tests", "queries_text", 12),
+            ("Notes", "hints_text", 12),
+            ("Reference", "cheat_sheet_text", 12)
+        ]
 
-        facts_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(facts_frame, text="Database Facts")
-        self.facts_text = self.create_styled_text(facts_frame, state=tk.DISABLED, height=12, font=('Consolas', 10))
-        self.facts_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        for tab_info in tabs:
+            name, attr_name = tab_info[0], tab_info[1]
+            height = tab_info[2]
+            font = tab_info[3] if len(tab_info) > 3 else None
 
-        law_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(law_frame, text="Legal Requirements")
-        self.law_text = self.create_styled_text(law_frame, state=tk.DISABLED, height=12)
-        self.law_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            frame = ttk.Frame(problem_notebook, style='Pastel.TFrame')
+            problem_notebook.add(frame, text=name)
 
-        queries_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(queries_frame, text="Test Specs")
-        self.queries_text = self.create_styled_text(queries_frame, state=tk.DISABLED, height=12)
-        self.queries_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            kwargs = {'state': tk.DISABLED, 'height': height}
+            if font:
+                kwargs['font'] = font
 
-        hints_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(hints_frame, text="Hints")
-        self.hints_text = self.create_styled_text(hints_frame, state=tk.DISABLED, height=12)
-        self.hints_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-        cheat_sheet_frame = ttk.Frame(problem_notebook, style='Solarpunk.TFrame')
-        problem_notebook.add(cheat_sheet_frame, text="Cheatsheet")
-        self.cheat_sheet_text = self.create_styled_text(cheat_sheet_frame, state=tk.DISABLED, height=12)
-        self.cheat_sheet_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            text_widget = self.create_styled_text(frame, **kwargs)
+            text_widget.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            setattr(self, attr_name, text_widget)
 
     def setup_code_editor(self):
-        """Setup Solarpunk-styled code editor with calculator interface"""
-        # Top panel: Live results display
-        results_label = ttk.Label(self.editor_frame, text="Results", style='Header.TLabel')
-        results_label.pack(pady=5)
+        # Top section: Pocket-Inferer header with image
+        pocket_header = ttk.Frame(self.editor_frame, style='Panel.TFrame')
+        pocket_header.pack(fill=tk.X, padx=10, pady=8)
 
-        self.live_results_text = self.create_styled_text(self.editor_frame, height=10)
+        header_content = ttk.Frame(pocket_header, style='Panel.TFrame')
+        header_content.pack(fill=tk.X, padx=10, pady=8)
+
+        # Left side: title and status
+        left_header = ttk.Frame(header_content, style='Panel.TFrame')
+        left_header.pack(side=tk.LEFT, fill=tk.Y)
+
+        ttk.Label(left_header, text="Pocket-Inferer",
+                  style='Header.TLabel').pack(anchor=tk.W)
+        ttk.Label(left_header, text="Logical Calculator · Model Tadashi-B-2028",
+                  font=('Helvetica Neue', 8),
+                  foreground=Theme.COLORS['text_secondary'],
+                  background=Theme.COLORS['bg_panel']).pack(anchor=tk.W, pady=(2, 0))
+
+        # Right side: device image (if available)
+        try:
+            if PIL_AVAILABLE and os.path.exists("sprites/pocket-inferer.jpg"):
+                pocket_image = Image.open("sprites/pocket-inferer.jpg")
+                pocket_image = pocket_image.resize((80, 80), Image.Resampling.LANCZOS)
+                pocket_photo = ImageTk.PhotoImage(pocket_image)
+
+                img_label = tk.Label(header_content, image=pocket_photo, bg=Theme.COLORS['bg_panel'])
+                img_label.image = pocket_photo
+                img_label.pack(side=tk.RIGHT, padx=10)
+            elif PIL_AVAILABLE and os.path.exists("sprites/pocket-inferer.png"):
+                pocket_image = Image.open("sprites/pocket-inferer.png")
+                pocket_image = pocket_image.resize((80, 80), Image.Resampling.LANCZOS)
+                pocket_photo = ImageTk.PhotoImage(pocket_image)
+
+                img_label = tk.Label(header_content, image=pocket_photo, bg=Theme.COLORS['bg_panel'])
+                img_label.image = pocket_photo
+                img_label.pack(side=tk.RIGHT, padx=10)
+        except:
+            pass
+
+        # Calculator display (live results)
+        display_label = ttk.Label(self.editor_frame, text="Display",
+                                  font=('Helvetica Neue', 9),
+                                  foreground=Theme.COLORS['text_secondary'],
+                                  background=Theme.COLORS['bg_primary'])
+        display_label.pack(pady=(5, 2), padx=10, anchor=tk.W)
+
+        self.live_results_text = self.create_styled_text(self.editor_frame, height=8)
         self.live_results_text.pack(fill=tk.BOTH, expand=False, padx=10, pady=(0, 10))
 
-        # Middle panel: Code editor header and input
-        editor_header = ttk.Frame(self.editor_frame, style='Panel.TFrame')
-        editor_header.pack(fill=tk.X, padx=10, pady=10)
+        # Code input area header
+        editor_header = ttk.Frame(self.editor_frame, style='Pastel.TFrame')
+        editor_header.pack(fill=tk.X, padx=10, pady=(8, 4))
 
-        ttk.Label(editor_header, text="Your Code",
-                  style='Header.TLabel').pack(side=tk.LEFT)
+        ttk.Label(editor_header, text="Input",
+                  font=('Helvetica Neue', 9),
+                  foreground=Theme.COLORS['text_secondary'],
+                  background=Theme.COLORS['bg_primary']).pack(side=tk.LEFT)
 
-        self.attempts_label = ttk.Label(editor_header, text="", style='Solarpunk.TLabel')
+        self.attempts_label = ttk.Label(editor_header, text="", style='Pastel.TLabel')
         self.attempts_label.pack(side=tk.RIGHT)
 
-        # Code editor
-        self.code_text = self.create_styled_text(self.editor_frame, height=8)
+        # Code input area
+        self.code_text = self.create_styled_text(self.editor_frame, height=8, font=('Menlo', 10))
         self.code_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
 
-        # Bottom panel: Prolog template buttons (calculator-style)
+        # Calculator-style button panel
         button_panel = ttk.Frame(self.editor_frame, style='Panel.TFrame')
-        button_panel.pack(fill=tk.X, padx=10, pady=10)
+        button_panel.pack(fill=tk.X, padx=10, pady=8)
 
-        ttk.Label(button_panel, text="", style='Header.TLabel').pack(anchor=tk.W, pady=(0, 5))
+        ttk.Label(button_panel, text="Function Keys",
+                  font=('Helvetica Neue', 9),
+                  foreground=Theme.COLORS['text_secondary'],
+                  background=Theme.COLORS['bg_panel']).pack(anchor=tk.W, padx=10, pady=(5, 8))
 
-        templates_frame = ttk.Frame(button_panel, style='Solarpunk.TFrame')
-        templates_frame.pack(fill=tk.X)
+        templates_frame = ttk.Frame(button_panel, style='Pastel.TFrame')
+        templates_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
 
         templates = [
-            ("Fact", "predicate(argument)."),
-            ("Rule", "<head> :- <body>."),
-            ("Query", "?- predicate(X)."),
-            ("AND (,)", "<condition1>, <condition2>"),
-            ("OR (;)", "(<condition1> ; <condition2>)"),
-            ("Negation", "\\+ predicate(X)"),
-            ("Unify", "X = value"),
-            ("Compare <", "X < Y"),
-            ("Compare >", "X > Y"),
-            ("Compare =", "X = Y"),
-            ("List", "[H|T]"),
-            ("Findall", "findall(X, predicate(X), L)"),
-            ("Member", "member(X, [1,2,3])"),
-            ("Length", "length(List, N)"),
-            ("Append", "append(List1, List2, Result)"),
-            ("Comment", "% This is a comment"),
+            ("Fact", "predicate(arg)."), ("Rule", "head :- body."),
+            ("Query", "?- pred(X)."), ("AND", "cond1, cond2"),
+            ("OR", "(c1 ; c2)"), ("NOT", "\\+ pred(X)"),
+            ("Unify", "X = value"), ("< ", "X < Y"),
+            ("> ", "X > Y"), ("= ", "X = Y"),
+            ("List", "[H|T]"), ("Findall", "findall(X, p(X), L)"),
+            ("Member", "member(X, [1,2])"), ("Length", "length(L, N)"),
+            ("Append", "append(L1, L2, R)"), ("Comment", "% note"),
         ]
 
         for i, (label, template) in enumerate(templates):
-            btn = PrologTemplateButton(
-                templates_frame,
-                template,
-                label,
-                self.code_text
-            )
+            btn = PrologTemplateButton(templates_frame, template, label, self.code_text)
             btn.grid(row=i // 4, column=i % 4, padx=3, pady=3, sticky="nsew")
 
         for i in range(4):
             templates_frame.grid_columnconfigure(i, weight=1)
 
-        # Action buttons
-        action_frame = ttk.Frame(self.editor_frame, style='Solarpunk.TFrame')
-        action_frame.pack(fill=tk.X, padx=10, pady=10)
+        # Main control buttons (calculator-style)
+        control_frame = ttk.Frame(button_panel, style='Pastel.TFrame')
+        control_frame.pack(fill=tk.X, padx=10, pady=(10, 5))
 
-        self.go_button = ttk.Button(action_frame, text="Go",
-                                    command=self.execute_code, style='Solarpunk.TButton')
-        self.go_button.pack(side=tk.LEFT, padx=5)
+        ttk.Label(control_frame, text="Controls",
+                  font=('Helvetica Neue', 9),
+                  foreground=Theme.COLORS['text_secondary'],
+                  background=Theme.COLORS['bg_panel']).pack(anchor=tk.W, pady=(0, 5))
 
-        self.submit_button = ttk.Button(action_frame, text="Submit Code",
-                                        command=self.test_solution, style='Solarpunk.TButton')
-        self.submit_button.pack(side=tk.LEFT, padx=5)
+        action_frame = ttk.Frame(control_frame, style='Pastel.TFrame')
+        action_frame.pack(fill=tk.X)
 
-        ttk.Button(action_frame, text="Clear Code",
-                   command=self.clear_code, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=5)
+        self.go_button = ttk.Button(action_frame, text="Compute", command=self.execute_code,
+                                    style='Pastel.TButton')
+        self.go_button.pack(side=tk.LEFT, padx=3)
 
-        ttk.Button(action_frame, text="Load Example",
-                   command=self.load_example, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=5)
+        self.submit_button = ttk.Button(action_frame, text="Submit", command=self.test_solution,
+                                        style='Pastel.TButton')
+        self.submit_button.pack(side=tk.LEFT, padx=3)
 
-        self.prolog_status = ttk.Label(action_frame, text="", style='Solarpunk.TLabel')
+        ttk.Button(action_frame, text="Clear", command=self.clear_code,
+                   style='Pastel.TButton').pack(side=tk.LEFT, padx=3)
+        ttk.Button(action_frame, text="Example", command=self.load_example,
+                   style='Pastel.TButton').pack(side=tk.LEFT, padx=3)
+
+        self.prolog_status = ttk.Label(action_frame, text="",
+                                       font=('Helvetica Neue', 8),
+                                       foreground=Theme.COLORS['text_secondary'],
+                                       background=Theme.COLORS['bg_primary'])
         self.prolog_status.pack(side=tk.RIGHT, padx=10)
 
         self.update_prolog_status()
 
     def setup_results_panel(self):
-        """Setup Solarpunk-styled results panel"""
-        header = ttk.Label(self.results_frame, text="Legal Compliance Report",
-                           style='Header.TLabel')
-        header.pack(pady=15)
+        ttk.Label(self.results_frame, text="Compliance Report",
+                  style='Header.TLabel').pack(pady=12)
 
         self.results_text = self.create_styled_text(self.results_frame, height=25, state=tk.DISABLED)
         self.results_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        results_buttons = ttk.Frame(self.results_frame, style='Solarpunk.TFrame')
+        results_buttons = ttk.Frame(self.results_frame, style='Pastel.TFrame')
         results_buttons.pack(fill=tk.X, padx=10, pady=10)
 
-        ttk.Button(results_buttons, text="Clear Report",
-                   command=self.clear_results, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=5)
+        ttk.Button(results_buttons, text="Clear", command=self.clear_results,
+                   style='Pastel.TButton').pack(side=tk.LEFT, padx=5)
 
     def populate_level_list(self):
-        """Populate the level selection list"""
         self.level_listbox.delete(0, tk.END)
         for i, level in enumerate(self.levels):
-            self.level_listbox.insert(tk.END, f"Mission {i + 1}: {level.title}")
+            self.level_listbox.insert(tk.END, f"Task {i + 1}: {level.title}")
 
     def on_level_select(self, event=None):
-        """Handle level selection"""
         selection = self.level_listbox.curselection()
         if selection:
-            level_index = selection[0]
-            self.load_level(level_index)
-            self.notebook.select(self.editor_frame)
+            self.load_level(selection[0])
+            self.notebook.select(self.problem_frame)
 
     def load_level(self, level_index: int):
-        """Load a specific level"""
         if 0 <= level_index < len(self.levels):
             self.current_level_index = level_index
             self.current_level = self.levels[level_index]
             self.attempts_remaining = 3
 
-            self.problem_title.config(text=f"Mission {level_index + 1}: {self.current_level.title}")
+            self.problem_title.config(text=f"Task {level_index + 1}: {self.current_level.title}")
 
             self.update_text_widget(self.story_text, self.current_level.background_story)
             self.update_text_widget(self.facts_text, self.current_level.given_facts)
             self.update_text_widget(self.law_text, self.current_level.law_description)
 
-            queries_text = "Test Specifications (your code must satisfy these):\n\n"
+            queries_text = "Test specifications:\n\n"
             for i, query in enumerate(self.current_level.queries, 1):
-                queries_text += f"{i}. Query: {query.query}\n"
-                queries_text += f"   Expected: {query.expected if query.expected else 'Should fail'}\n"
+                queries_text += f"{i}. {query.query}\n"
+                queries_text += f"   Expected: {query.expected if query.expected else 'fail'}\n"
                 if query.description:
                     queries_text += f"   {query.description}\n"
                 queries_text += "\n"
-
             self.update_text_widget(self.queries_text, queries_text)
 
             if self.current_level.hints:
-                hints_text = "Hints from the fedi-net:\n\n"
-                for i, hint in enumerate(self.current_level.hints, 1):
-                    hints_text += f"{i}. {hint}\n"
+                hints_text = "Implementation notes:\n\n" + "\n".join(
+                    f"{i}. {h}" for i, h in enumerate(self.current_level.hints, 1))
             else:
-                hints_text = "No hints available."
-
+                hints_text = "No additional notes."
             self.update_text_widget(self.hints_text, hints_text)
 
             if self.current_level.solution:
-                cheat_sheet_text = "Cheat Sheet (Solution)\n\n"
-                for solution in self.current_level.solution:
-                    cheat_sheet_text += f"{solution}\n"
+                cheat_sheet_text = "Reference Solution\n\n" + "\n".join(self.current_level.solution)
             else:
-                cheat_sheet_text = "No solution available."
-
+                cheat_sheet_text = "No reference available."
             self.update_text_widget(self.cheat_sheet_text, cheat_sheet_text)
 
             self.code_text.delete(1.0, tk.END)
@@ -716,46 +663,40 @@ class LawMakerGUI:
             self.clear_live_results()
 
             self.update_attempts_display()
-            self.status_label.config(text=f"Mission {level_index + 1} loaded: {self.current_level.title}")
+            self.status_label.config(text=f"Task {level_index + 1} loaded")
 
     def update_text_widget(self, widget, text):
-        """Update a text widget with new content"""
         widget.config(state=tk.NORMAL)
         widget.delete(1.0, tk.END)
         widget.insert(1.0, text)
         widget.config(state=tk.DISABLED)
 
     def update_attempts_display(self):
-        """Update the attempts remaining display"""
-        hearts = "♥" * self.attempts_remaining + "♢" * (3 - self.attempts_remaining)
-        self.attempts_label.config(text=f"Attempts: {hearts}")
+        dots = "●" * self.attempts_remaining + "○" * (3 - self.attempts_remaining)
+        self.attempts_label.config(text=f"Attempts: {dots}")
 
     def update_prolog_status(self):
-        """Update the Prolog availability status"""
         if self.prolog_runner.prolog_available:
-            self.prolog_status.config(text="Prolog Online", foreground=SolarpunkTheme.COLORS['success'])
+            self.prolog_status.config(text="Prolog: active", foreground=Theme.COLORS['success'])
         else:
-            self.prolog_status.config(text="Prolog Offline", foreground=SolarpunkTheme.COLORS['warning'])
+            self.prolog_status.config(text="Prolog: unavailable", foreground=Theme.COLORS['warning'])
 
     def clear_live_results(self):
-        """Clear the live results display"""
         self.live_results_text.config(state=tk.NORMAL)
         self.live_results_text.delete(1.0, tk.END)
         self.live_results_text.config(state=tk.DISABLED)
 
     def execute_code(self):
-        """Execute code and show results in live results panel (without using attempts)"""
         if not self.current_level:
-            messagebox.showwarning("Warning", "Please select a mission first!")
+            messagebox.showwarning("", "Please select a task first.")
             return
 
         user_code = self.code_text.get(1.0, tk.END).strip()
         if not user_code:
-            messagebox.showwarning("Warning", "Please enter some Prolog code in the editor!")
+            messagebox.showwarning("", "Editor is empty.")
             return
 
-        self.go_button.config(state=tk.DISABLED)
-        self.go_button.config(text="Executing...")
+        self.go_button.config(state=tk.DISABLED, text="Computing...")
 
         def run_code():
             try:
@@ -768,27 +709,20 @@ class LawMakerGUI:
         threading.Thread(target=run_code, daemon=True).start()
 
     def display_live_results(self, result: GameResult, details: Dict):
-        """Display execution results in live results panel"""
-        self.go_button.config(state=tk.NORMAL, text="Go")
+        self.go_button.config(state=tk.NORMAL, text="Compute")
 
         results_text = ""
-
         if result == GameResult.SUCCESS:
-            results_text += "✓ ALL TESTS PASSED!\n"
-            results_text += "─" * 40 + "\n"
+            results_text = "All tests passed.\n" + "─" * 40 + "\n"
             for query_id, query_result in details.items():
                 if query_id.startswith('query_'):
-                    results_text += f"✓ {query_result['query']}\n"
-                    results_text += f"  → {query_result['actual']}\n"
+                    results_text += f"✓ {query_result['query']}\n  → {query_result['actual']}\n"
 
         elif result == GameResult.PROLOG_ERROR:
-            results_text += "✗ SYNTAX ERROR\n"
-            results_text += "─" * 40 + "\n"
-            results_text += f"{details.get('error', 'Unknown error')}\n"
+            results_text = f"Syntax error detected.\n{'─' * 40}\n{details.get('error', 'Unknown error')}\n"
 
         elif result == GameResult.WRONG_RESULTS:
-            results_text += "✗ TEST FAILURES\n"
-            results_text += "─" * 40 + "\n"
+            results_text = "Test failures detected.\n" + "─" * 40 + "\n"
             for query_id, query_result in details.items():
                 if query_id.startswith('query_'):
                     if query_result['correct']:
@@ -804,31 +738,28 @@ class LawMakerGUI:
         self.live_results_text.config(state=tk.DISABLED)
 
     def display_live_error(self, error_msg: str):
-        """Display execution error in live results panel"""
-        self.go_button.config(state=tk.NORMAL, text="Go")
-        error_text = f"✗ ERROR\n─ * 40 + \n{error_msg}"
+        self.go_button.config(state=tk.NORMAL, text="Compute")
+        error_text = f"Error occurred.\n{'─' * 40}\n{error_msg}"
         self.live_results_text.config(state=tk.NORMAL)
         self.live_results_text.delete(1.0, tk.END)
         self.live_results_text.insert(1.0, error_text)
         self.live_results_text.config(state=tk.DISABLED)
 
     def test_solution(self):
-        """Test the user's solution with enhanced feedback (uses attempts)"""
         if not self.current_level:
-            messagebox.showwarning("Warning", "Please select a mission first!")
+            messagebox.showwarning("", "Please select a task first.")
             return
 
         if self.attempts_remaining <= 0:
-            messagebox.showinfo("Info", "No attempts remaining for this mission!")
+            messagebox.showinfo("", "No attempts remaining for this task.")
             return
 
         user_code = self.code_text.get(1.0, tk.END).strip()
         if not user_code:
-            messagebox.showwarning("Warning", "Please enter some Prolog code in the editor!")
+            messagebox.showwarning("", "Editor is empty.")
             return
 
-        self.submit_button.config(state=tk.DISABLED)
-        self.submit_button.config(text="Analyzing...")
+        self.submit_button.config(state=tk.DISABLED, text="Evaluating...")
 
         def run_test():
             try:
@@ -841,77 +772,60 @@ class LawMakerGUI:
         threading.Thread(target=run_test, daemon=True).start()
 
     def display_test_results(self, result: GameResult, details: Dict):
-        """Display test results with Solarpunk styling"""
-        self.submit_button.config(state=tk.NORMAL, text="Submit Code")
+        self.submit_button.config(state=tk.NORMAL, text="Submit")
 
-        results_text = "LEGAL COMPLIANCE REPORT\n"
-        results_text += "=" * 50 + "\n"
-        results_text += f"Mission: {self.current_level.title}\n"
-        results_text += f"Attempt: {4 - self.attempts_remaining}/3\n"
-        results_text += "=" * 50 + "\n\n"
+        results_text = "Compliance Report\n" + "=" * 50 + "\n"
+        results_text += f"Task: {self.current_level.title}\n"
+        results_text += f"Attempt: {4 - self.attempts_remaining}/3\n" + "=" * 50 + "\n\n"
 
         if result == GameResult.SUCCESS:
-            results_text += "MISSION ACCOMPLISHED!\n"
-            results_text += "Your legal implementation passes all compliance tests!\n"
-            results_text += "The citizens of Solarfurt thank you for your service!\n\n"
+            results_text += "Task completed successfully.\nAll requirements satisfied.\n\n"
 
             for query_id, query_result in details.items():
                 if query_id.startswith('query_'):
-                    results_text += f"[OK] Query: {query_result['query']}\n"
-                    results_text += f"     Expected: {query_result['expected'] if query_result['expected'] else 'Should fail'}\n"
-                    results_text += f"     Got: {query_result['actual']}\n\n"
+                    results_text += f"[pass] {query_result['query']}\n"
+                    results_text += f"       Expected: {query_result['expected'] if query_result['expected'] else 'fail'}\n"
+                    results_text += f"       Result: {query_result['actual']}\n\n"
 
-            messagebox.showinfo("Success!",
-                                f"Mission {self.current_level_index + 1} completed!\n\n"
-                                f"Your Prolog implementation correctly satisfies all legal requirements.\n\n"
-                                f"Good job!")
+            messagebox.showinfo("",
+                                f"Task {self.current_level_index + 1} completed.\n\nImplementation verified successfully.")
 
         elif result == GameResult.PROLOG_ERROR:
-            results_text += "SYSTEM ERROR\n"
-            results_text += f"The compiler encountered an issue:\n"
-            results_text += f"{details.get('error', 'Unknown error')}\n\n"
-            results_text += "Check your syntax and try again!\n"
+            results_text += f"Syntax error.\nIssue: {details.get('error', 'Unknown error')}\n\nPlease review and resubmit.\n"
 
         elif result == GameResult.WRONG_RESULTS:
-            results_text += "COMPLIANCE VIOLATIONS DETECTED\n\n"
+            results_text += "Compliance issues detected.\n\n"
 
             for query_id, query_result in details.items():
                 if query_id.startswith('query_'):
-                    if query_result['correct']:
-                        results_text += f"[OK] Query: {query_result['query']}\n"
-                    else:
-                        results_text += f"[FAIL] Query: {query_result['query']}\n"
-
-                    results_text += f"      Expected: {query_result['expected'] if query_result['expected'] else 'Should fail'}\n"
-                    results_text += f"      Got: {query_result['actual']}\n"
+                    status = "[pass]" if query_result['correct'] else "[fail]"
+                    results_text += f"{status} {query_result['query']}\n"
+                    results_text += f"       Expected: {query_result['expected'] if query_result['expected'] else 'fail'}\n"
+                    results_text += f"       Result: {query_result['actual']}\n"
 
                     if 'error' in query_result and query_result['error']:
-                        results_text += f"      Error: {query_result['error']}\n"
-
+                        results_text += f"       Note: {query_result['error']}\n"
                     results_text += "\n"
 
         self.attempts_remaining -= 1
         self.update_attempts_display()
 
         if result != GameResult.SUCCESS and self.attempts_remaining == 0:
-            results_text += "\nOUT OF ATTEMPTS!\n"
-            results_text += "Mission failed, but you can try other missions or reload this one.\n"
+            results_text += "\nAttempts exhausted.\nConsider reviewing the task or selecting another.\n"
         elif result != GameResult.SUCCESS and self.attempts_remaining > 0:
-            hearts = "♥" * self.attempts_remaining
-            results_text += f"\nTry again! {hearts} attempts remaining.\n"
+            dots = "●" * self.attempts_remaining
+            results_text += f"\n{dots} attempts remaining.\n"
 
             if self.attempts_remaining == 2 and self.current_level.hints:
-                results_text += "\nYou can browse the hints tab for assistance:\n"
-                for i, hint in enumerate(self.current_level.hints, 1):
-                    results_text += f"{i}. {hint}\n"
+                results_text += "\nConsult the Notes tab for guidance.\n"
 
         self.results_text.config(state=tk.NORMAL)
         self.results_text.delete(1.0, tk.END)
         self.results_text.insert(1.0, results_text)
 
-        self.results_text.tag_configure("success", foreground=SolarpunkTheme.COLORS['success'])
-        self.results_text.tag_configure("error", foreground=SolarpunkTheme.COLORS['warning'])
-        self.results_text.tag_configure("header", foreground=SolarpunkTheme.COLORS['accent_secondary'])
+        self.results_text.tag_configure("success", foreground=Theme.COLORS['success'])
+        self.results_text.tag_configure("error", foreground=Theme.COLORS['warning'])
+        self.results_text.tag_configure("header", foreground=Theme.COLORS['text_accent'])
 
         content = self.results_text.get(1.0, tk.END)
         lines = content.split('\n')
@@ -919,56 +833,51 @@ class LawMakerGUI:
             line_start = f"{i + 1}.0"
             line_end = f"{i + 1}.end"
 
-            if "[OK]" in line or "ACCOMPLISHED" in line:
+            if "[pass]" in line or "successfully" in line:
                 self.results_text.tag_add("success", line_start, line_end)
-            elif "[FAIL]" in line or "ERROR" in line or "VIOLATIONS" in line:
+            elif "[fail]" in line or "error" in line.lower() or "issues" in line:
                 self.results_text.tag_add("error", line_start, line_end)
-            elif "REPORT" in line or "Mission:" in line:
+            elif "Report" in line or "Task:" in line:
                 self.results_text.tag_add("header", line_start, line_end)
 
         self.results_text.config(state=tk.DISABLED)
-
         self.notebook.select(self.results_frame)
 
     def display_error(self, error_msg: str):
-        """Display an error message"""
-        self.submit_button.config(state=tk.NORMAL, text="Submit Code")
-        messagebox.showerror("System Error", f"The compiler encountered an issue:\n\n{error_msg}")
+        self.submit_button.config(state=tk.NORMAL, text="Submit")
+        messagebox.showerror("Error", f"Compilation issue:\n\n{error_msg}")
 
     def clear_code(self):
-        """Clear the code editor"""
         self.code_text.delete(1.0, tk.END)
 
     def clear_results(self):
-        """Clear the results panel"""
         self.results_text.config(state=tk.NORMAL)
         self.results_text.delete(1.0, tk.END)
         self.results_text.config(state=tk.DISABLED)
 
     def load_example(self):
-        """Load an example solution"""
         if not self.current_level:
-            messagebox.showwarning("Warning", "Please select a mission first!")
+            messagebox.showwarning("", "Please select a task first.")
             return
 
-        example_code = "% Your Prolog code goes here\n% Implement the required predicates!\n\n"
+        example_code = "% Implementation goes here\n% Define required predicates\n\n"
 
         if self.current_level.id == "student_meal_subsidy":
-            example_code = """% Student meal subsidy implementation for Solarfurt
+            example_code = """% Student meal subsidy implementation
 
-% A person is eligible if they are a student AND under 25
+% Eligibility: student status and age below 25
 eligible(Person) :-
     student(Person),
     age(Person, Age),
     Age < 25.
 
-% Low-income eligible students get 80 credits (50 + 30 bonus)
+% Low-income eligible students: 80 credits (base + supplement)
 subsidy_amount(Person, Amount) :-
     eligible(Person),
     income(Person, low),
     Amount = 80.
 
-% Other eligible students get 50 credits (base amount)
+% Other eligible students: 50 credits (base only)
 subsidy_amount(Person, Amount) :-
     eligible(Person),
     \\+ income(Person, low),
@@ -978,203 +887,101 @@ subsidy_amount(Person, Amount) :-
         self.code_text.insert(1.0, example_code)
 
     def refresh_levels(self):
-        """Refresh levels from current directory"""
         try:
             self.levels = LevelLoader.load_levels_from_directory(self.levels_directory)
             self.populate_level_list()
-            self.status_label.config(text=f"Refreshed {len(self.levels)} missions from database")
+            self.status_label.config(text=f"Refreshed: {len(self.levels)} tasks loaded")
 
-            if (self.current_level and
-                    self.current_level_index < len(self.levels) and
+            if (self.current_level and self.current_level_index < len(self.levels) and
                     self.levels[self.current_level_index].id == self.current_level.id):
                 self.load_level(self.current_level_index)
             elif self.levels:
                 self.load_level(0)
-
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to refresh legal database:\n{e}")
+            messagebox.showerror("Error", f"Refresh failed:\n{e}")
 
     def run(self):
-        """Start the Solarpunk GUI application"""
-
         def show_welcome_dialog():
-            """Create a custom welcome dialog with image"""
-            # Create the dialog window
             dialog = tk.Toplevel(self.root)
             dialog.title("Law Maker")
-            dialog.geometry("900x900")  # Made taller to accommodate both images
+            dialog.geometry("800x750")
             dialog.resizable(False, False)
-            dialog.grab_set()  # Make it modal
-
-            # Center the dialog
+            dialog.grab_set()
             dialog.transient(self.root)
             dialog.geometry("+%d+%d" % (self.root.winfo_rootx() + 50, self.root.winfo_rooty() + 50))
 
-            # Main frame with scrollbar capability
-            main_frame = tk.Frame(dialog, bg='#2d5016', padx=20, pady=20)
+            main_frame = tk.Frame(dialog, bg=Theme.COLORS['bg_primary'], padx=30, pady=30)
             main_frame.pack(fill=tk.BOTH, expand=True)
 
-            # Try to load and display the cityscape image
             try:
-                if os.path.exists("sprites/cityscape-background-illustration.jpg"):
-                    # Load and resize the image
+                if PIL_AVAILABLE and os.path.exists("sprites/cityscape-background-illustration.jpg"):
                     image = Image.open("sprites/cityscape-background-illustration.jpg")
-                    # Resize to fit nicely in the dialog
-                    image = image.resize((800, 400), Image.Resampling.LANCZOS)
+                    image = image.resize((740, 350), Image.Resampling.LANCZOS)
                     photo = ImageTk.PhotoImage(image)
 
-                    # Image label
-                    img_label = tk.Label(main_frame, image=photo, bg='#2d5016')
-                    img_label.image = photo  # Keep a reference
-                    img_label.pack(pady=(0, 15))
-                else:
-                    # Fallback if image not found
-                    tk.Label(main_frame, text="[City Image Not Found]",
-                             font=('Arial', 12), bg='#2d5016', fg='#90EE90').pack(pady=(0, 15))
-            except Exception as e:
-                # Fallback if PIL not available or other error
-                tk.Label(main_frame, text="[Solarpunk City]",
-                         font=('Arial', 12), bg='#2d5016', fg='#90EE90').pack(pady=(0, 15))
+                    img_label = tk.Label(main_frame, image=photo, bg=Theme.COLORS['bg_primary'])
+                    img_label.image = photo
+                    img_label.pack(pady=(0, 20))
+            except:
+                pass
 
-            # Create a horizontal frame for text and device image side by side
-            content_frame = tk.Frame(main_frame, bg='#2d5016')
-            content_frame.pack(pady=(0, 15), fill=tk.BOTH, expand=True)
+            welcome_msg = """Welcome to Solarfurt.
 
-            # Left side - Welcome text
-            text_frame = tk.Frame(content_frame, bg='#2d5016')
-            text_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+The year is 2028. The civil service is aging—predictably, without drama.
 
-            welcome_msg = """Welcome to Solarfurt!
+To address this, laws are being transformed into processable logic. A new device assists: the Pocket-Inferer, a logical calculator which translates ordinances into executable code. Your role involves learning this system and formalizing municipal regulations.
 
-    It's the year 2028. Society is aging and more and more civil servants are starting to retire.
+The work is precise. Occasionally tedious. Somehow satisfying. The question who buys new coffee remains unresolved.
+"""
 
-    To tackle the problem, the citizens of Solarfurt decided to transform all laws into a machine-processable format.
-
-    For this, a new device was developed: the "Pocket-Inferer", a logical calculator with which public servants could turn laws, data and queries into understandable code.
-
-    As a civil servant, your task will be to learn how to use the Pocket-Inferer and turn law into code.
-
-    Are you up for the challenge?"""
-
-            # Text widget for the message
-            text_widget = tk.Text(text_frame, height=12, width=45, wrap=tk.WORD,
-                                  font=('Arial', 10), bg='#3d6026', fg='#90EE90',
-                                  relief=tk.FLAT, bd=0, padx=10, pady=10)
+            text_widget = tk.Text(main_frame, height=10, width=70, wrap=tk.WORD,
+                                  font=('Helvetica Neue', 11),
+                                  bg=Theme.COLORS['bg_panel'],
+                                  fg=Theme.COLORS['text_primary'],
+                                  relief=tk.FLAT, bd=0, padx=20, pady=20)
             text_widget.insert(tk.END, welcome_msg)
-            text_widget.config(state=tk.DISABLED)  # Make it read-only
-            text_widget.pack(fill=tk.BOTH, expand=True)
+            text_widget.config(state=tk.DISABLED)
+            text_widget.pack(fill=tk.BOTH, expand=True, pady=(0, 20))
 
-            # Right side - Pocket-Inferer device
-            device_frame = tk.Frame(content_frame, bg='#2d5016')
-            device_frame.pack(side=tk.RIGHT, padx=(10, 0))
-
-            # Try to load and display the Pocket-Inferer image
-            try:
-                if os.path.exists("sprites/pocket-inferer.jpg"):
-                    # Load and resize the Pocket-Inferer image
-                    pocket_image = Image.open("sprites/pocket-inferer.jpg")
-                    # Resize to fit nicely on the right side
-                    pocket_image = pocket_image.resize((300, 350), Image.Resampling.LANCZOS)
-                    pocket_photo = ImageTk.PhotoImage(pocket_image)
-
-                    # Label for the device
-                    tk.Label(device_frame, text="The Pocket-Inferer",
-                             font=('Arial', 12, 'bold'), bg='#2d5016', fg='#90EE90').pack(pady=(0, 10))
-
-                    # Device image
-                    pocket_img_label = tk.Label(device_frame, image=pocket_photo, bg='#2d5016')
-                    pocket_img_label.image = pocket_photo  # Keep a reference
-                    pocket_img_label.pack()
-
-                elif os.path.exists("sprites/pocket-inferer.png"):
-                    # Try PNG format as fallback
-                    pocket_image = Image.open("sprites/pocket-inferer.png")
-                    pocket_image = pocket_image.resize((300, 350), Image.Resampling.LANCZOS)
-                    pocket_photo = ImageTk.PhotoImage(pocket_image)
-
-                    tk.Label(device_frame, text="The Pocket-Inferer",
-                             font=('Arial', 12, 'bold'), bg='#2d5016', fg='#90EE90').pack(pady=(0, 10))
-
-                    pocket_img_label = tk.Label(device_frame, image=pocket_photo, bg='#2d5016')
-                    pocket_img_label.image = pocket_photo
-                    pocket_img_label.pack()
-
-                else:
-                    # Fallback if Pocket-Inferer image not found
-                    tk.Label(device_frame, text="The Pocket-Inferer",
-                             font=('Arial', 12, 'bold'), bg='#2d5016', fg='#90EE90').pack(pady=(0, 10))
-
-                    # Create a placeholder box
-                    placeholder_frame = tk.Frame(device_frame, bg='#4d7036', width=300, height=350, relief=tk.RAISED,
-                                                 bd=2)
-                    placeholder_frame.pack_propagate(False)  # Maintain size
-                    placeholder_frame.pack()
-
-                    tk.Label(placeholder_frame, text="📱\n[Device Image\nNot Found]\n🔧",
-                             font=('Arial', 12), bg='#4d7036', fg='#90EE90', justify=tk.CENTER).place(relx=0.5,
-                                                                                                      rely=0.5,
-                                                                                                      anchor=tk.CENTER)
-
-            except Exception as e:
-                # Fallback if image loading fails
-                tk.Label(device_frame, text="The Pocket-Inferer",
-                         font=('Arial', 12, 'bold'), bg='#2d5016', fg='#90EE90').pack(pady=(0, 10))
-
-                # Create a placeholder box
-                placeholder_frame = tk.Frame(device_frame, bg='#4d7036', width=300, height=350, relief=tk.RAISED, bd=2)
-                placeholder_frame.pack_propagate(False)  # Maintain size
-                placeholder_frame.pack()
-
-                tk.Label(placeholder_frame, text="📱\n[Logical\nCalculator]\n🔧",
-                         font=('Arial', 12), bg='#4d7036', fg='#90EE90', justify=tk.CENTER).place(relx=0.5, rely=0.5,
-                                                                                                  anchor=tk.CENTER)
-
-            # OK button
-            ok_button = tk.Button(main_frame, text="Sure! Let's start Coding!",
+            ok_button = tk.Button(main_frame, text="Ok then",
                                   command=dialog.destroy,
-                                  font=('Arial', 12, 'bold'),
-                                  bg='#4d7036', fg='#90EE90',
-                                  relief=tk.RAISED, bd=2,
-                                  padx=20, pady=10)
-            ok_button.pack(pady=(15, 0))
+                                  font=('Helvetica Neue', 11),
+                                  bg=Theme.COLORS['accent_primary'],
+                                  fg=Theme.COLORS['text_primary'],
+                                  relief=tk.FLAT, bd=0,
+                                  padx=30, pady=10)
+            ok_button.pack()
 
-            # Wait for the dialog to be closed
             dialog.wait_window()
 
-        # Show the welcome dialog
         show_welcome_dialog()
-
-        # Start the main loop
         self.root.mainloop()
 
 
 def create_sample_levels():
-    """Create sample level files in the levels directory"""
-    levels_dir = "levels"
-    LevelLoader.create_sample_levels(levels_dir)
-    print("Sample legal missions created in 'levels' directory")
+    LevelLoader.create_sample_levels("levels")
+    print("Sample tasks created in 'levels' directory")
 
 
 def main():
-    """Main entry point for the Solarpunk Legal System"""
-    print("Initializing Solarfurt Legal System...")
+    print("Initializing Law Maker...")
 
     if not os.path.exists("levels") or not os.listdir("levels"):
-        print("Setting up legal database...")
+        print("Setting up task database...")
         create_sample_levels()
 
     if not JANUS_AVAILABLE:
-        print("Warning: janus_swi not available!")
-        print("For optimal performance, install with: pip install janus_swi")
+        print("Warning: janus_swi not available")
+        print("Install with: pip install janus_swi")
 
     try:
-        print("Launching rusty-futuristic interface...")
+        print("Launching interface...")
         app = LawMakerGUI()
         app.run()
     except KeyboardInterrupt:
-        print("\nLegal system shutdown initiated. Thank you for serving Solarfurt!")
+        print("\nShutdown initiated.")
     except Exception as e:
-        print(f"System error in the compiler: {e}")
+        print(f"System error: {e}")
         import traceback
         traceback.print_exc()
 
