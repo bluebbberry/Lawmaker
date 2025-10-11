@@ -622,9 +622,13 @@ class LawMakerGUI:
         action_frame = ttk.Frame(self.editor_frame, style='Solarpunk.TFrame')
         action_frame.pack(fill=tk.X, padx=10, pady=10)
 
-        self.test_button = ttk.Button(action_frame, text="Test Implementation",
-                                      command=self.test_solution, style='Solarpunk.TButton')
-        self.test_button.pack(side=tk.LEFT, padx=5)
+        self.go_button = ttk.Button(action_frame, text="Go",
+                                    command=self.execute_code, style='Solarpunk.TButton')
+        self.go_button.pack(side=tk.LEFT, padx=5)
+
+        self.submit_button = ttk.Button(action_frame, text="Submit Code",
+                                        command=self.test_solution, style='Solarpunk.TButton')
+        self.submit_button.pack(side=tk.LEFT, padx=5)
 
         ttk.Button(action_frame, text="Clear Code",
                    command=self.clear_code, style='Solarpunk.TButton').pack(side=tk.LEFT, padx=5)
@@ -739,8 +743,77 @@ class LawMakerGUI:
         self.live_results_text.delete(1.0, tk.END)
         self.live_results_text.config(state=tk.DISABLED)
 
+    def execute_code(self):
+        """Execute code and show results in live results panel (without using attempts)"""
+        if not self.current_level:
+            messagebox.showwarning("Warning", "Please select a mission first!")
+            return
+
+        user_code = self.code_text.get(1.0, tk.END).strip()
+        if not user_code:
+            messagebox.showwarning("Warning", "Please enter some Prolog code in the editor!")
+            return
+
+        self.go_button.config(state=tk.DISABLED)
+        self.go_button.config(text="Executing...")
+
+        def run_code():
+            try:
+                full_code = self.current_level.given_facts + '\n' + user_code
+                result, details = self.prolog_runner.run_queries(full_code, self.current_level.queries)
+                self.root.after(0, lambda: self.display_live_results(result, details))
+            except Exception as e:
+                self.root.after(0, lambda: self.display_live_error(str(e)))
+
+        threading.Thread(target=run_code, daemon=True).start()
+
+    def display_live_results(self, result: GameResult, details: Dict):
+        """Display execution results in live results panel"""
+        self.go_button.config(state=tk.NORMAL, text="Go")
+
+        results_text = ""
+
+        if result == GameResult.SUCCESS:
+            results_text += "✓ ALL TESTS PASSED!\n"
+            results_text += "─" * 40 + "\n"
+            for query_id, query_result in details.items():
+                if query_id.startswith('query_'):
+                    results_text += f"✓ {query_result['query']}\n"
+                    results_text += f"  → {query_result['actual']}\n"
+
+        elif result == GameResult.PROLOG_ERROR:
+            results_text += "✗ SYNTAX ERROR\n"
+            results_text += "─" * 40 + "\n"
+            results_text += f"{details.get('error', 'Unknown error')}\n"
+
+        elif result == GameResult.WRONG_RESULTS:
+            results_text += "✗ TEST FAILURES\n"
+            results_text += "─" * 40 + "\n"
+            for query_id, query_result in details.items():
+                if query_id.startswith('query_'):
+                    if query_result['correct']:
+                        results_text += f"✓ {query_result['query']}\n"
+                    else:
+                        results_text += f"✗ {query_result['query']}\n"
+                        results_text += f"  Expected: {query_result['expected']}\n"
+                        results_text += f"  Got: {query_result['actual']}\n"
+
+        self.live_results_text.config(state=tk.NORMAL)
+        self.live_results_text.delete(1.0, tk.END)
+        self.live_results_text.insert(1.0, results_text)
+        self.live_results_text.config(state=tk.DISABLED)
+
+    def display_live_error(self, error_msg: str):
+        """Display execution error in live results panel"""
+        self.go_button.config(state=tk.NORMAL, text="Go")
+        error_text = f"✗ ERROR\n─ * 40 + \n{error_msg}"
+        self.live_results_text.config(state=tk.NORMAL)
+        self.live_results_text.delete(1.0, tk.END)
+        self.live_results_text.insert(1.0, error_text)
+        self.live_results_text.config(state=tk.DISABLED)
+
     def test_solution(self):
-        """Test the user's solution with enhanced feedback"""
+        """Test the user's solution with enhanced feedback (uses attempts)"""
         if not self.current_level:
             messagebox.showwarning("Warning", "Please select a mission first!")
             return
@@ -754,8 +827,8 @@ class LawMakerGUI:
             messagebox.showwarning("Warning", "Please enter some Prolog code in the editor!")
             return
 
-        self.test_button.config(state=tk.DISABLED)
-        self.test_button.config(text="Analyzing...")
+        self.submit_button.config(state=tk.DISABLED)
+        self.submit_button.config(text="Analyzing...")
 
         def run_test():
             try:
@@ -769,7 +842,7 @@ class LawMakerGUI:
 
     def display_test_results(self, result: GameResult, details: Dict):
         """Display test results with Solarpunk styling"""
-        self.test_button.config(state=tk.NORMAL, text="Test Implementation")
+        self.submit_button.config(state=tk.NORMAL, text="Submit Code")
 
         results_text = "LEGAL COMPLIANCE REPORT\n"
         results_text += "=" * 50 + "\n"
@@ -859,7 +932,7 @@ class LawMakerGUI:
 
     def display_error(self, error_msg: str):
         """Display an error message"""
-        self.test_button.config(state=tk.NORMAL, text="Test Implementation")
+        self.submit_button.config(state=tk.NORMAL, text="Submit Code")
         messagebox.showerror("System Error", f"The compiler encountered an issue:\n\n{error_msg}")
 
     def clear_code(self):
