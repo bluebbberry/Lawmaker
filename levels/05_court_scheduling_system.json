@@ -59,5 +59,7 @@
     "For optimal_assignment, find any valid judge-day combination that works",
     "Remember that scheduled/3 shows existing conflicts to avoid"
   ],
-  "difficulty": 5
+  "difficulty": 5,
+  "pre_story": "Friday, 8:52 AM\n\nJudge Martinez's clerk, Kevin, finds you in the parking garage. He's holding a stack of case files and has the careful demeanor of someone who works in the judicial system.\n\n\"The judge sent me,\" he says, which seems to carry institutional weight. You both head toward the elevator. \"The court is backed up. She used the word 'crisis' in chambers yesterday.\"\n\nAt your desk, he arranges the files with unnecessary precision. \"Four judges. Multiple specializations. Availability conflicts. Cases with different priorities that all seem urgent to someone.\" He straightens his tie. \"The Bar Association is watching. The Citizens' Rights Group is also watching. Everyone is watching, actually.\"\n\nHe opens a spreadsheet that someone printed in landscape orientation. \"Martinez handles criminal and administrative. Thompson does civil and family. Liu, Patel—\" He stops himself. \"It's all in here. Who can handle what. Who's available when. Who's already scheduled for something else.\"\n\nHe checks his watch with the efficiency of someone who tracks time in fifteen-minute increments.\n\n\"Emergency cases need immediate assignment. Complex cases need proper attention. Justice needs to be served promptly.\" He pauses. \"The judge would like this working by Monday. She was very specific about the timeline.\"\n\nHe's already heading for the door. \"I'll be at my desk if you have questions. I'm always at my desk.\"",
+  "image_path": "sprites/parking_garage.jpg"
 }

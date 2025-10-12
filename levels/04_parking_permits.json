@@ -48,5 +48,7 @@
     "Downtown surcharge applies only to non-free permits",
     "Use different rules for different resident types to calculate costs"
   ],
-  "difficulty": 2
+  "difficulty": 2,
+  "pre_story": "Tuesday, 2:13 PM\n\nLisa from Traffic Department stands in your doorway, holding a laminated folder.\n\n\"The parking thing,\" she says. She's been with the city for nineteen years and has seen four parking reforms. This is evident in her tone.\n\n\"Mayor Johnson wants it to be fair.\" She places the folder on your desk. \"Last month she wanted it to generate revenue. This month it's fair.\"\n\nShe points to a highlighted section. \"Seniors are free. Disabled are free. Downtown costs extra unless you're already free, then it doesn't cost extra.\" She delivers this information the way someone might describe weather.\n\n\"The council meeting is Thursday. They'll have questions about edge cases. They always have questions about edge cases.\"\n\nShe's already leaving. \"Good luck with the edge cases.\"",
+  "image_path": "sprites/office.jpg"
 }

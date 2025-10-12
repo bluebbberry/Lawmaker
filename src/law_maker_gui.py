@@ -16,6 +16,7 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
+
 class LawMakerGUI:
     """View-based GUI for the Law Maker game"""
 
@@ -66,7 +67,7 @@ class LawMakerGUI:
         try:
             if PIL_AVAILABLE and os.path.exists("sprites/cityscape-background-illustration.jpg"):
                 image = Image.open("sprites/cityscape-background-illustration.jpg")
-                image = image.resize((800, 400), Image.Resampling.LANCZOS)
+                image = image.resize((700, 400), Image.Resampling.LANCZOS)
                 photo = ImageTk.PhotoImage(image)
                 img_label = tk.Label(intro_frame, image=photo, bg=Theme.COLORS['bg_primary'])
                 img_label.image = photo
@@ -167,14 +168,78 @@ The work is precise. Occasionally tedious. Somehow satisfying. The question who 
             self.task_listbox.insert(tk.END, f"[{status}] Ordinance {i + 1}: {level.title}")
 
     def select_task(self):
-        """Select a task and show the workspace"""
+        """Select a task and show pre-story if available"""
         selection = self.task_listbox.curselection()
         if not selection:
             messagebox.showwarning("", "Please select a task first.")
             return
 
         self.load_level(selection[0])
-        self.show_task_workspace()
+
+        # Show pre-story view if available, otherwise go directly to workspace
+        if self.current_level.pre_story:
+            self.show_pre_story_view()
+        else:
+            self.show_task_workspace()
+
+    def show_pre_story_view(self):
+        """Show the pre-story/dialog before starting a task"""
+        self.current_view = GameView.PRE_STORY
+        self.clear_view()
+
+        story_frame = tk.Frame(self.main_container, bg=Theme.COLORS['bg_primary'], padx=40, pady=30)
+        story_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Header
+        ttk.Label(story_frame,
+                  text=f"Ordinance {self.current_level_index + 1}: {self.current_level.title}",
+                  style='Header.TLabel').pack(pady=(10, 20))
+
+        # Image if available
+        if self.current_level.image_path:
+            try:
+                if PIL_AVAILABLE and os.path.exists(self.current_level.image_path):
+                    image = Image.open(self.current_level.image_path)
+                    # Resize to reasonable size
+                    image = image.resize((600, 300), Image.Resampling.LANCZOS)
+                    photo = ImageTk.PhotoImage(image)
+                    img_label = tk.Label(story_frame, image=photo, bg=Theme.COLORS['bg_primary'])
+                    img_label.image = photo
+                    img_label.pack(pady=(0, 20))
+            except Exception as e:
+                print(f"Could not load image: {e}")
+
+        # Story text
+        story_text = tk.Text(story_frame, height=15, width=80, wrap=tk.WORD,
+                             font=('Helvetica Neue', 11),
+                             bg=Theme.COLORS['bg_panel'],
+                             fg=Theme.COLORS['text_primary'],
+                             relief=tk.FLAT, bd=0, padx=25, pady=25)
+        story_text.insert(tk.END, self.current_level.pre_story)
+        story_text.config(state=tk.DISABLED)
+        story_text.pack(fill=tk.BOTH, expand=True, pady=(0, 20))
+
+        # Buttons
+        button_frame = tk.Frame(story_frame, bg=Theme.COLORS['bg_primary'])
+        button_frame.pack(pady=10)
+
+        btn1 = tk.Button(button_frame, text="Begin Task",
+                         command=self.show_task_workspace,
+                         font=('Helvetica Neue', 11),
+                         bg=Theme.COLORS['accent_primary'],
+                         fg=Theme.COLORS['text_primary'],
+                         relief=tk.FLAT, bd=0,
+                         padx=40, pady=12)
+        btn1.pack(side=tk.LEFT, padx=5)
+
+        btn2 = tk.Button(button_frame, text="Back",
+                         command=self.show_task_overview,
+                         font=('Helvetica Neue', 9),
+                         bg=Theme.COLORS['bg_secondary'],
+                         fg=Theme.COLORS['text_primary'],
+                         relief=tk.FLAT, bd=0,
+                         padx=20, pady=10)
+        btn2.pack(side=tk.LEFT, padx=5)
 
     def load_level(self, level_index: int):
         """Load a specific level"""

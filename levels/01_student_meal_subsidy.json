@@ -59,5 +59,7 @@
     "subsidy_amount(Person, 50) :-",
     "    eligible(Person),          % Person must be eligible first",
     "   \\+ income(Person, low).    % AND NOT have low income"
-  ]
+  ],
+  "pre_story": "Monday, 9:47 AM Karla appears at your desk holding a printed ordinance. She's from the second floor. You've seen her at the coffee machine. \n\n\"This one's straightforward,\" she says, placing the document down. \"Student meal subsidies. Council passed it last week. It needs to be in the system by Thursday.\" She adjusts her glasses. \"Well, I guess ... the Pocket-Inferer documentation is... somewhere. Thomas might know. He's been here since 2019. You can ask him if there's training soon.\" she says, bored, but not unkindly. \"The system's old but it works. Mostly. Just follow the specs.\"She walks back toward the elevator. \n\n\"Oh, and the coffee machine's broken again. Don't ask me why.\"",
+  "image_path": "sprites/cluttered_desk.jpg"
 }
