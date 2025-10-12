@@ -50,6 +50,6 @@
     "Affordable housing discount (60%) typically overrides other discounts if larger"
   ],
   "difficulty": 4,
-  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
-  "image_path": "sprites/cluttered_desk.jpg"
+  "pre_story": "Wednesday, 4:41 PM\n\nDiana catches you in the hallway outside the copy room. She's from the Assessor's Office and has the expression of someone who's already answered these questions twelve times today.\n\n\"Property tax reform,\" she says, sliding a thick folder into your hands. \"Revolutionary is the word the council used. I was there. Someone actually said revolutionary.\"\n\nYou walk back to your desk together. She flips to a page with color-coded brackets. \"Progressive system. Green incentives. Homestead exemptions that interact with residency discounts that interact with affordability designations.\" She pauses. \"The mayor wants this before the re-election campaign kicks off, which is apparently soon.\"\n\nShe produces a second document. \"The real estate lobby sent a twelve-page analysis. Housing advocates sent a fourteen-page rebuttal. Neither group agrees on what 'fair' means, but both agree you need to get the math right.\"\n\nShe stands to leave, then turns back. \"Someone will check your work. Multiple someones, probably.\"\n\nThe folder stays behind. It's heavier than it looks.",
+  "image_path": "sprites/office_hallway.jpg"
 }

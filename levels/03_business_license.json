@@ -65,6 +65,6 @@
     "Remember that discounts apply to the base fee for each class"
   ],
   "difficulty": 3,
-  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
-  "image_path": "sprites/cluttered_desk.jpg"
+  "pre_story": "Monday, 11:34 AM\n\nRaj from Commerce appears at the break room coffee machine with a three-ring binder. He looks tired.\n\n\"They want business licenses automated,\" he says, following you back to your desk with the weight of inevitability. \"The Chamber called. Then they emailed. Then they called about the email.\"\n\nHe opens to a page with multiple colored tabs. \"Class A, B, C. Employee thresholds. Revenue brackets.\" He recites this mechanically. \"Non-profits are always Class C. Unless they're not, according to page seventeen, but that's a different situation.\"\n\nYou notice he's brought his own coffee, which means he expects to stay.\n\n\"Healthcare over one hundred employees is automatic Class A. Someone fought hard for that rule in committee. It shows.\" He taps the discount section. \"Minority-owned businesses get twenty-five percent off. The Chamber wants to make sure that's implemented exactly right.\"\n\nHe closes the binder. \"They're calling back at three.\"",
+  "image_path": "sprites/office_break_room.jpg"
 }
