@@ -48,5 +48,7 @@
     "Downtown surcharge applies only to non-free permits",
     "Use different rules for different resident types to calculate costs"
   ],
-  "difficulty": 2
+  "difficulty": 2,
+  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
+  "image_path": "sprites/cluttered_desk.jpg"
 }

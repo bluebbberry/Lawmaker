@@ -7,3 +7,4 @@ class GameView(Enum):
     TASK_WORKSPACE = "task_workspace"
     FAILURE = "failure"
     SUCCESS = "success"
+    PRE_STORY = "pre_story"

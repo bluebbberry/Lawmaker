@@ -49,5 +49,7 @@
     "Long-term residency discounts only apply to homestead properties",
     "Affordable housing discount (60%) typically overrides other discounts if larger"
   ],
-  "difficulty": 4
+  "difficulty": 4,
+  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
+  "image_path": "sprites/cluttered_desk.jpg"
 }

@@ -16,3 +16,5 @@ class Level:
     difficulty: int = 1
     solution: List[str] = None
     completed: bool = False
+    pre_story: str = None
+    image_path: str = None

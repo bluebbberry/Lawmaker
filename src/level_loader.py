@@ -59,7 +59,9 @@ class LevelLoader:
                 queries=queries,
                 hints=data.get('hints', []),
                 difficulty=data.get('difficulty', 1),
-                solution=data.get('solution', [])
+                solution=data.get('solution', []),
+                pre_story = data.get('pre_story', None),
+                image_path = data.get('image_path', None)
             )
 
             return level
@@ -95,7 +97,10 @@ class LevelLoader:
                 "Low-income students get 80 credits (50 + 30 bonus)",
                 "Non-eligible people should make subsidy_amount fail"
             ],
-            "difficulty": 1
+            "difficulty": 1,
+            "pre_story": "Monday, 9:47 AM\n\nKarla appears at your desk holding a printed ordinance. She's from the second floor. You've seen her at the coffee machine.\n\n\"This one's straightforward,\" she says, placing the document down. \"Student meal subsidies. Council passed it last week. Needs to be in the system by Thursday.\"\n\nShe adjusts her glasses. \"The Pocket-Inferer documentation is... somewhere. Thomas might know. He's been here since 2019.\"\n\nYou ask if there's training.\n\n\"You're looking at it,\" she says, not unkindly. \"The system's old but it works. Mostly. Just follow the specs.\"\n\nShe walks back toward the elevator. \"Oh, and the coffee machine's broken again. Don't ask me why.\"",
+            "image_path": "sprites/cluttered_desk.jpg",
+
         }
 
         with open(os.path.join(directory, '01_student_meal_subsidy.json'), 'w') as f:

@@ -59,5 +59,7 @@
     "For optimal_assignment, find any valid judge-day combination that works",
     "Remember that scheduled/3 shows existing conflicts to avoid"
   ],
-  "difficulty": 5
+  "difficulty": 5,
+  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
+  "image_path": "sprites/cluttered_desk.jpg"
 }

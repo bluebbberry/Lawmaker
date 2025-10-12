@@ -64,5 +64,7 @@
     "Apply discounts in order: essential service discount first, then minority-owned",
     "Remember that discounts apply to the base fee for each class"
   ],
-  "difficulty": 3
+  "difficulty": 3,
+  "pre_story": "Tuesday, 2:13 PM\n\nThomas leans against your cubicle wall...",
+  "image_path": "sprites/cluttered_desk.jpg"
 }
