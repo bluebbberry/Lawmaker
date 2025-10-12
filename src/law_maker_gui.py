@@ -456,7 +456,7 @@ The work is precise. Occasionally tedious. Somehow satisfying. The question who 
 
         ttk.Button(action_frame, text="Clear", command=self.clear_code,
                    style='Pastel.TButton').pack(side=tk.LEFT, padx=3)
-        ttk.Button(action_frame, text="Example", command=self.load_example,
+        ttk.Button(action_frame, text="Help", command=self.load_example,
                    style='Pastel.TButton').pack(side=tk.LEFT, padx=3)
 
         self.prolog_status = ttk.Label(action_frame, text="",
