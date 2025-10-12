@@ -1,6 +1,6 @@
 # Law Maker
 
-First-order-logic-based Zacktronic-like point'n' click game.
+First-order-logic-based Zacktronic-like point'n' click game. Here is a short [demo](https://youtu.be/sGs8lp9hefo?si=j5nnadeRBm_LTJku).
 
 ## Requirements
 
