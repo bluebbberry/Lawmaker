@@ -67,7 +67,7 @@ class LawMakerGUI:
         try:
             if PIL_AVAILABLE and os.path.exists("sprites/cityscape-background-illustration.jpg"):
                 image = Image.open("sprites/cityscape-background-illustration.jpg")
-                image = image.resize((800, 400), Image.Resampling.LANCZOS)
+                image = image.resize((700, 400), Image.Resampling.LANCZOS)
                 photo = ImageTk.PhotoImage(image)
                 img_label = tk.Label(intro_frame, image=photo, bg=Theme.COLORS['bg_primary'])
                 img_label.image = photo
